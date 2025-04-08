@@ -1,0 +1,34 @@
+{
+  "name": "imtixon",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "config": "^3.3.12",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-pino-logger": "^7.0.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "node-device-detector": "^2.2.0",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "otp-generator": "^4.0.1",
+    "pg": "^8.14.1",
+    "pino": "^9.6.0",
+    "pino-multi-stream": "^6.0.0",
+    "pino-pretty": "^13.0.0",
+    "redis": "^4.7.0",
+    "sequelize": "^6.37.7",
+    "uuid": "^11.1.0"
+  }
+}
