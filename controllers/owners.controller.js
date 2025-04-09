@@ -57,7 +57,7 @@ const addOwner = async (req, res) => {
 
     await mailService.sendActivationMail(
       owner.email,
-      `${config.get("api_url")}/api/client/activate/${activation_link}`
+      `${config.get("api_url")}/api/owner/activate/${activation_link}`
     );
 
     res.status(201).send({

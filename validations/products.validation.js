@@ -24,6 +24,8 @@ exports.productValidation = (body) => {
       "any.required": `"condition" maydoni majburiy`
     }),
     image_url: Joi.string().default("/images/img.png"),
+    ownerId :Joi.number(),
+    categoryId: Joi.number()
   });
   return schemaProduct.validate(body, {
     ebortEarly: false,

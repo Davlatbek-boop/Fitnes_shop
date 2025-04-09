@@ -3,6 +3,7 @@ const sequelize = require("../config/db");
 const Products = require("./products.model");
 const Status = require("./status.model");
 const Clients = require("./clients.model");
+const Owners = require("./owners.model");
 
 const Contracts = sequelize.define("contract", {
   id: {
@@ -35,5 +36,8 @@ Status.hasMany(Contracts)
 
 Contracts.belongsTo(Clients)
 Clients.hasMany(Contracts)
+
+Contracts.belongsTo(Owners)
+Owners.hasMany(Contracts)
 
 module.exports = Contracts;

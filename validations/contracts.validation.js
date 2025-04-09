@@ -24,6 +24,7 @@ exports.contractValidation = (body) => {
     clientId: Joi.number(),
     productId: Joi.number(),
     statusId: Joi.number(),
+    ownerId: Joi.number()
   });
   return schemaContract.validate(body, {
     ebortEarly: false,

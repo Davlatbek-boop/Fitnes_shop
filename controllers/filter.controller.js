@@ -27,7 +27,7 @@ const getClientsByDemages = async (req, res) => {
 
     const result = await pool.query(
       `
-      SELECT cl.user_name, cl.last_name, cl.email, cl.phone, cl.address
+      SELECT cl.id, cl.user_name, cl.last_name, cl.email, cl.phone, cl.address, p.description as prod_desc
       FROM clients AS cl
       JOIN contracts AS c ON cl.id = c."clientId"
       JOIN products AS p ON c."productId" = p.id
@@ -50,7 +50,7 @@ const getClientsByRejected = async (req, res) => {
     const { fromDate, toDate } = req.body;
     const result = await pool.query(
       `
-      SELECT cl.user_name, cl.last_name, cl.email, cl.phone, cl.address
+      SELECT cl.id, cl.user_name, cl.last_name, cl.email, cl.phone, cl.address, c.id as contractID
       FROM clients AS cl
       JOIN contracts AS c ON cl.id = c."clientId"
       JOIN statuses AS s ON c."statusId" = s.id
@@ -70,14 +70,15 @@ const countBestOwners = async (req, res) => {
     const { category } = req.body;
     const result = await pool.query(
       `
-      select o.id, o.user_name, o.email, 
-COUNT(*) AS rental_count 
-from owners as o 
+      select 
+      o.id, o.user_name, o.email, p.name as product,
+      COUNT(*) AS rental_count 
+      from owners as o 
 join products as p on o.id = p."ownerId"
 join contracts as c on c."productId" = p.id
 join categories as cat on cat.id = p."categoryId"
 where cat.name = $1
-group by o.id, o.user_name, o.email
+group by o.id, o.user_name, o.email, p.name
 order by rental_count desc
 limit 10;
     `,
@@ -91,19 +92,33 @@ limit 10;
 
 const paymentsQuery = async (req, res) => {
   try {
-    const { client_email } = req.body;
+    const { client_email, category_name, product_name } = req.body;
     const result = await pool.query(
       `
-     select pay.amount, pay.payment_method, pay.is_paid, pay.paid_at, pay.transaction_code , 
-cat.name as category_name, p.name as product_name, o.email as owner_email from payments as pay 
-join contracts as c on c.id = pay."contractId"
-join clients as cl on cl.id = c."clientId"
-join products as p on p.id = c."productId"
-join owners as o on o.id = p."ownerId"
-join categories as cat on cat.id = p."categoryId"
-where cl.email = $1
+     SELECT 
+    pay.amount AS payment_amount,
+    pay.payment_method AS method,
+    pay.is_paid AS is_payment_done,
+    pay.paid_at AS payment_date,
+    pay.transaction_code AS transaction_id,
+    cat.name AS category_name,
+    p.name AS product_name,
+    p.description AS product_description,
+    o.email AS owner_email 
+    FROM payments AS pay
+JOIN contracts AS c ON c.id = pay."contractId"
+JOIN clients AS cl ON cl.id = c."clientId"
+JOIN products AS p ON p.id = c."productId"
+JOIN owners AS o ON o.id = p."ownerId"
+JOIN categories AS cat ON cat.id = p."categoryId"
+JOIN statuses AS st ON st.id = c."statusId"
+WHERE st.name = 'approved' AND
+cl.email = $1 AND
+cat.name = $2 AND
+p.name = $3;
+
     `,
-      [client_email]
+      [client_email, category_name, product_name]
     );
     res.status(200).send({ result: result.rows });
   } catch (error) {

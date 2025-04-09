@@ -14,8 +14,8 @@ const router = require("express").Router();
 
 router.post("/", tokenGuard, roleGuard(["owner"]), addProduct);
 router.get("/all/products/:id", tokenGuard, ownerSelfGuard, getAllCardByOwnerId)
-router.get("/", tokenGuard, roleGuard(["Admin", "client"]), getAllProduct);
-router.get("/:id", tokenGuard, roleGuard(["Admin"]), getProductById);
+router.get("/", getAllProduct);
+router.get("/:id", getProductById);
 router.put("/:id", tokenGuard, roleGuard(["Admin"]), updateProductById);
 router.delete("/:id", tokenGuard, roleGuard(["Admin"]), deleteProductById);
 

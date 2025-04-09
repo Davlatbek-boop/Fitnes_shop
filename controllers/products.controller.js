@@ -10,7 +10,7 @@ const addProduct = async (req, res) => {
       return errorHandler(error, res)
     }
 
-    const { name, description, price_per_day, quantity, condition, image_url } =
+    const { name, description, price_per_day, quantity, condition, image_url, ownerId, categoryId } =
       value;
 
     const newProduct = await Product.create({
@@ -20,6 +20,8 @@ const addProduct = async (req, res) => {
       quantity,
       condition,
       image_url,
+      ownerId,
+      categoryId
     });
     res.status(201).send({ message: "Added new Product", newProduct });
   } catch (error) {

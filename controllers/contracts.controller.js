@@ -1,6 +1,7 @@
 const Contract = require("../models/contracts.model");
 const { errorHandler } = require("../helpers/error_handler");
 const { contractValidation } = require("../validations/contracts.validation");
+const { where } = require("sequelize");
 
 const addContract = async (req, res) => {
   try {
@@ -17,6 +18,7 @@ const addContract = async (req, res) => {
       clientId,
       productId,
       statusId,
+      ownerId
     } = value;
 
     const total_days = Math.ceil(
@@ -32,6 +34,7 @@ const addContract = async (req, res) => {
       clientId,
       productId,
       statusId,
+      ownerId
     });
     res.status(201).send({ message: "Added new ", newContract });
   } catch (error) {
@@ -111,11 +114,58 @@ const getAllCardByClientId = async (req, res) => {
   }
 };
 
+const getContractByClientId = async (req, res) => {
+  try {
+    const clientId = req.params.id;
+    const contract = await Contract.findAll({where:{clientId}});
+    res.status(200).send({ contract });
+  } catch (error) { 
+    errorHandler(error, res);
+  }
+};
+
+const getContractByClientIdAndContractId = async (req, res) => {
+  try {
+    const clientId = req.params.id;
+    const contractId = req.params.contractId
+    console.log(contractId);
+    const contract = await Contract.findOne({where:{clientId, id:contractId}});
+    res.status(200).send({ contract });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
+const getContractByOwnerIdAndContractId = async (req, res) => {
+  try {
+    const ownerId = req.params.id;
+    const contractId = req.params.contractId
+    const contract = await Contract.findOne({where:{ownerId, id:contractId}});
+    res.status(200).send({ contract });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
+const getContractByOwnerId = async (req, res) => {
+  try {
+    const ownerId = req.params.id;
+    const contract = await Contract.findAll({where:{ownerId}});
+    res.status(200).send({ contract });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
 module.exports = {
   addContract,
   getAllContract,
   getContractById,
   updateContractById,
   deleteContractById,
-  getAllCardByClientId
+  getAllCardByClientId,
+  getContractByClientId,
+  getContractByOwnerId,
+  getContractByClientIdAndContractId,
+  getContractByOwnerIdAndContractId
 };
