@@ -4,7 +4,6 @@ const {
   getContractById,
   updateContractById,
   deleteContractById,
-  getAllCardByClientId,
   getContractByClientId,
   getContractByOwnerId,
   getContractByClientIdAndContractId,
@@ -18,26 +17,35 @@ const tokenGuard = require("../middleware/guards/token.guard");
 const router = require("express").Router();
 
 router.post("/", tokenGuard, addContract);
-router.get("/all/contract/:id",tokenGuard, clientSelfGuard, getAllCardByClientId )
 router.get("/", tokenGuard, roleGuard(["Admin", "creator"]), getAllContract);
-router.get("/client/:id/contract/:contractId",tokenGuard, clientSelfGuard, getContractByClientIdAndContractId)
-router.get("/client/:id/contracts",tokenGuard, clientSelfGuard, getContractByClientId)
-router.get("/owner/:id/contract/:contractId",tokenGuard, ownerSelfGuard, getContractByOwnerIdAndContractId)
-router.get("/owner/:id/contracts",tokenGuard, ownerSelfGuard, getContractByOwnerId)
-
 router.get(
-  "/owner/:id",
-  tokenGuard,
-  ownerSelfGuard,
-  getContractById
-);
-
-router.get(
-  "/client/:id",
+  "/client/:id/contract/:contractId",
   tokenGuard,
   clientSelfGuard,
-  getContractById
+  getContractByClientIdAndContractId
 );
+router.get(
+  "/client/:id/contracts",
+  tokenGuard,
+  clientSelfGuard,
+  getContractByClientId
+);
+router.get(
+  "/owner/:id/contract/:contractId",
+  tokenGuard,
+  ownerSelfGuard,
+  getContractByOwnerIdAndContractId
+);
+router.get(
+  "/owner/:id/contracts",
+  tokenGuard,
+  ownerSelfGuard,
+  getContractByOwnerId
+);
+
+router.get("/owner/:id", tokenGuard, ownerSelfGuard, getContractById);
+
+router.get("/client/:id", tokenGuard, clientSelfGuard, getContractById);
 
 router.put(
   "/:id",
