@@ -74,7 +74,7 @@ const deleteProductById = async (req, res) => {
   }
 };
 
-const getAllCardByOwnerId = async (req, res) => {
+const getAllProductByOwnerId = async (req, res) => {
   try {
     const id = req.params.id
     const products = await Product.findAll({where: {ownerId: id}});
@@ -90,5 +90,5 @@ module.exports = {
   getProductById,
   updateProductById,
   deleteProductById,
-  getAllCardByOwnerId
+  getAllProductByOwnerId
 };

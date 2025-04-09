@@ -20,25 +20,25 @@ const router = require("express").Router();
 router.post("/", tokenGuard, addContract);
 router.get("/all/contract/:id",tokenGuard, clientSelfGuard, getAllCardByClientId )
 router.get("/", tokenGuard, roleGuard(["Admin", "creator"]), getAllContract);
-router.get("/client/:id/contract/:contractId", getContractByClientIdAndContractId)
-router.get("/client/:id/contracts", getContractByClientId)
-router.get("/owner/:id/contract/:contractId", getContractByOwnerIdAndContractId)
-router.get("/owner/:id/contracts", getContractByOwnerId)
+router.get("/client/:id/contract/:contractId",tokenGuard, clientSelfGuard, getContractByClientIdAndContractId)
+router.get("/client/:id/contracts",tokenGuard, clientSelfGuard, getContractByClientId)
+router.get("/owner/:id/contract/:contractId",tokenGuard, ownerSelfGuard, getContractByOwnerIdAndContractId)
+router.get("/owner/:id/contracts",tokenGuard, ownerSelfGuard, getContractByOwnerId)
 
-
- 
 router.get(
   "/owner/:id",
   tokenGuard,
   ownerSelfGuard,
   getContractById
 );
+
 router.get(
   "/client/:id",
   tokenGuard,
   clientSelfGuard,
   getContractById
 );
+
 router.put(
   "/:id",
   tokenGuard,

@@ -1,7 +1,6 @@
 const Contract = require("../models/contracts.model");
 const { errorHandler } = require("../helpers/error_handler");
 const { contractValidation } = require("../validations/contracts.validation");
-const { where } = require("sequelize");
 
 const addContract = async (req, res) => {
   try {
